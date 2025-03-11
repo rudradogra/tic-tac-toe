@@ -22,19 +22,25 @@ function Square({ value, onSquareClick }) {
     }
     onPlay(nextSquares);
   }
-
   const winner = calculateWinner(squares);
+  const isDraw = !winner && squares.every(square => square !== null);
 
   useEffect(() => {
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-      setGameOver(true);  // Set game over when a winner is found
+    if (winner || isDraw) {
+      setGameOver(true);
     } else {
-      status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-      setGameOver(false); // Reset game over when game is active
+      setGameOver(false);
     }
-  }, [winner]);
+  }, [winner, isDraw]);
+
+  let status;
+  if (winner) {
+    status = `Winner: ${winner}`;
+  } else if (isDraw) {
+    status = "It's a Draw!";
+  } else {
+    status = `Next player: ${xIsNext ? 'X' : 'O'}`;
+  }
   
 
 
@@ -59,7 +65,7 @@ function Square({ value, onSquareClick }) {
       </div>
       {gameOver && (
         <div className='popUp'>
-        <h2>congratulations {winner}!!</h2>
+        <h2>{winner ? `Congratulations ${winner}!!` : "It's a Draw!"}</h2>
         <button onClick={restartGame}>Play again</button>
         </div>
       )}
