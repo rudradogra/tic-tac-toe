@@ -1,0 +1,38 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-template-rows: repeat(5, 60px);
+  gap: 5px;
+}
+
+.square {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid black;
+  background-color: white;
+}
+
+.status {
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.popUp {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.popUp h2 {
+  font-size: 24px;
+}
+
+.popUp button {
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
