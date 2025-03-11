@@ -8,18 +8,14 @@ function Square({ value, onSquareClick }) {
 }
 
 
- function Board({xIsNext,squares,onPlay,restartGame}) {
+ function Board({currentPlayer,squares,onPlay,restartGame}) {
   const [gameOver, setGameOver] = useState(false);
   function handleClick(i){
     if(squares[i] || calculateWinner(squares)){
       return;
     }
     const nextSquares = squares.slice();
-    if(xIsNext){
-      nextSquares[i] = "X";
-    }else{
-      nextSquares[i] = "O";
-    }
+    nextSquares[i] = currentPlayer;
     onPlay(nextSquares);
   }
   const winner = calculateWinner(squares);
@@ -39,7 +35,7 @@ function Square({ value, onSquareClick }) {
   } else if (isDraw) {
     status = "It's a Draw!";
   } else {
-    status = `Next player: ${xIsNext ? 'X' : 'O'}`;
+    status = `Next player: ${currentPlayer}`;
   }
   
 
@@ -74,19 +70,22 @@ function Square({ value, onSquareClick }) {
 }
 
 export default function Game() {
-  const [xIsNext,setXIsNext] = useState(true);
+  const players = ["X", "O", "I"];
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const currentSquares = history[history.length - 1];
+  const currentPlayer = players[history.length % 3];
 
   function handlePlay(nextSquares){
     setHistory([...history,nextSquares]);
-    setXIsNext(!xIsNext);
   }
 
   function jumpTo(moves){
     setHistory(history.slice(0,moves + 1));
-    setXIsNext(moves % 2 === 0);
   }
+  function restartGame(){
+    setHistory([Array(9).fill(null)]);
+  }
+
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
@@ -101,15 +100,11 @@ export default function Game() {
     );
   });
 
-  function restartGame(){
-    setHistory([Array(9).fill(null)]);
-    setXIsNext(true);
-  }
 
 return (
   <div className='game'>
     <div className='game-board'>
-      <Board xIsNext={xIsNext} squares={currentSquares} onPlay = {handlePlay} restartGame={restartGame}/>
+      <Board currentPlayer={currentPlayer} squares={currentSquares} onPlay = {handlePlay} restartGame={restartGame}/>
     </div>
     <div className="game-info">
         <ol>{moves}</ol>
